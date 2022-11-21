@@ -4,7 +4,7 @@
   "description": "An easy, small and fast 0 dependency statefull framework written in TypeScript.",
   "main": "dist/index.js",
   "keywords": ["framework","front","frontend","web","interface"],
-  "author": "",
+  "author": "@jaime-alvarez",
   "types": "dist/index.d.ts",
   "files": ["/dist"],
   "license": "ISC"

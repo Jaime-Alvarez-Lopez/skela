@@ -66,10 +66,13 @@ export default class Fragment implements F {
           typeof this.#props === "function" ? this.#props() : this.#props
         )
       );
-    if (this.#el instanceof Text && this.#props)
-      this.#el.data =
-        typeof this.#props === "function" ? this.#props() : this.#props;
-
+    if (this.#el instanceof Text && this.#props) {
+      this.#el.deleteData(0, this.#el.data.length);
+      this.#el.insertData(
+        0,
+        typeof this.#props === "function" ? this.#props() : this.#props
+      );
+    }
     if (this.hasChildren) DISPATCH(CHILDREN_HYDRATE, this.#children);
   }
   public get props(): any {
