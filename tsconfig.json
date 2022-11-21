@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+		"target": "ES2020",
+		"module": "ES2020",
+		"strict": true,
+		"incremental": true,
+		"declaration": true, 
+		"noImplicitAny": false,
+		"removeComments": false,
+		"noUnusedLocals": true /* Report errors on unused locals. */,
+		"noUnusedParameters": true /* Report errors on unused parameters. */,
+		"noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
+		"outDir": "dist",
+		"moduleResolution": "node",
+		"lib": ["DOM","ES2022","ES6","DOM.Iterable"],
+		"baseUrl": ".",
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "**/*.spec.ts","dist","test/lib","test"]
+}
