@@ -5,13 +5,14 @@ This package provides an easy,fast and lightweight statefull framework with no d
 Create your first component:
 
 ```javascript
-import { Container, H1,$RENDER, $NO_PROPS, Text } from "@jaime-alvarez/skela";
+import { Container, H1, $RENDER, $NO_PROPS, Text } from "@jaime-alvarez/skela";
 
 const myComponent = Container(
   {
     id: "main",
   },
-  H1($NO_PROPS, Text("Hello, World!"));
+  H1($NO_PROPS, Text("Hello, World!"))
+);
 
 myComponent.access($RENDER)();
 ```
