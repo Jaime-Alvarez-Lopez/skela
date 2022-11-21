@@ -1,13 +1,11 @@
 # Skela
 
----
-
 This package provides an easy,fast and lightweight statefull framework with no dependencies for developers to create user interfaces with.
 
 Create your first component:
 
 ```javascript
-import { Container, H1,$RENDER, $NO_PROPS, Text } from "@jal/skela";
+import { Container, H1,$RENDER, $NO_PROPS, Text } from "@jaime-alvarez/skela";
 
 const myComponent = Container(
   {
@@ -40,7 +38,7 @@ import {
   Button,
   Text,
   createState,
-} from "@jal/skela";
+} from "@jaime-alvarez/skela";
 
 const URL = "https://catfact.ninja/fact";
 
