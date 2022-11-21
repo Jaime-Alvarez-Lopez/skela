@@ -111,7 +111,7 @@ export function filterRestrictedAtributes(att: Props) {
   return f;
 }
 
-export function attrs(el: HTMLElement, props: AssignableAtributeProps) {
+export function attrs(el: HTMLElement, props: ElementAssignableAtributeProps) {
   if (typeof props === "object" && !Array.isArray(props)) {
     const at = Array.from(el.attributes);
     at.forEach((k) => {
