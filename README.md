@@ -13,8 +13,7 @@ const myComponent = Container(
   },
   H1($NO_PROPS, Text("Hello, World!"));
 
-myComponent.access($RENDER)()
-);
+myComponent.access($RENDER)();
 ```
 
 Results into this:
