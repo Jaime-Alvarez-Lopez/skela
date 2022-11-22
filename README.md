@@ -29,7 +29,6 @@ A simple component that fetches from an API:
 
 ```javascript
 import {
-  $NO_PROPS,
   $RENDER,
   Container,
   H1,
