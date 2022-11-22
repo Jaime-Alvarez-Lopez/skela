@@ -1,8 +1,9 @@
+import { Key } from "./key";
 import { attrs, filterRestrictedAtributes } from "./atributtes";
 import DISPATCHER, {
   APPEND_ELEMENT_CHILDS,
   CHILDREN_HYDRATE,
-  FRAGMENT_SIDE_EFFECT
+  FRAGMENT_SIDE_EFFECT,
 } from "./dispatcher";
 import cEl from "./el";
 import { isArray, isFunction, isObject, sanityzeProps } from "./utils";
@@ -11,17 +12,18 @@ import { isArray, isFunction, isObject, sanityzeProps } from "./utils";
  *  Represents an htmlelement.
  *  @class
  */
-export default class Fragment implements F {
-  readonly #ref: symbol = Symbol("$fragment$");
+export default class Fragment extends Key implements F {
   #el: HTMLElement | Text;
   #props: FragmentProps | any;
   #children: N[];
+  #customKey: null | KeyedRef = null;
   /**
    *  @param {string} tag
    *  @param {FragmentProps} props
    *  @constructs Fragment
    */
   constructor(tag: string, props: FragmentProps, children: N[]) {
+    super("fragment");
     this.#el = cEl(tag, props);
     this.#props = sanityzeProps(props);
     this.#children = children;
@@ -29,7 +31,8 @@ export default class Fragment implements F {
       if (this.hasChildren) DISPATCHER(APPEND_ELEMENT_CHILDS, this);
       if (isObject(this.#props)) {
         const _p = this.#props as Props;
-        if (_p.subscriptions) _p.subscriptions.forEach((s) => s(this.#ref));
+        if (_p.key && _p.key instanceof Key) this.#customKey = _p.key;
+        if (_p.subscriptions) _p.subscriptions.forEach((s) => s(this.key));
         if (_p.onmount) DISPATCHER(FRAGMENT_SIDE_EFFECT, _p.onmount);
       }
     }
@@ -60,8 +63,8 @@ export default class Fragment implements F {
   public get children(): N[] {
     return this.#children;
   }
-  public get $ref() {
-    return this.#ref;
+  public get customKey(): null | KeyedRef {
+    return this.#customKey;
   }
   public get $el() {
     return this.#el;

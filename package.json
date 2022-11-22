@@ -5,7 +5,11 @@
   "main": "dist/index.js",
   "keywords": ["framework","front","frontend","web","interface"],
   "author": "@jaime-alvarez",
+  "homepage": "https://github.com/Jaime-Alvarez-Lopez/skela#readme",
   "types": "dist/index.d.ts",
   "files": ["/dist"],
-  "license": "ISC"
+  "license": "ISC",
+  "scripts": {
+    "dist": "tsc"
+  }
 }
