@@ -1,4 +1,4 @@
-import { $NO_PROPS } from "src/symbols";
+import { $NO_PROPS } from "../symbols";
 
 export function isObject<K extends any>(target: K): boolean {
   return (
