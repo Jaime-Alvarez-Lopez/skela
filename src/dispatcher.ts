@@ -26,26 +26,31 @@ class SkelaProcessEvents {
     ],
     [
       FRAGMENT_RENDER,
-      (ev: CustomEvent) =>
+      (ev: CustomEvent) => {
+        const { target, fragment } = ev.detail;
+        if (!fragment) return;
         queueMicrotask(() => {
-          const { target, fragment } = ev.detail;
-          if (!fragment) return;
           let _fr = fragment;
           if (isSymbol(_fr) && REGISTRY.has(_fr)) _fr = REGISTRY.get(_fr) as F;
           if (!(_fr instanceof Fragment)) return;
+          queueMicrotask(() => _fr.hydrate());
           if (!target) document.body.appendChild(_fr.$el);
           if (target instanceof Fragment) target.$el.appendChild(_fr.$el);
           if (target instanceof Node)
             REGISTRY.get(_fr.key).$el.appendChild(fragment.$el);
           _fr.setMounted(true);
-        }),
+        });
+      },
     ],
     [
       FRAGMENT_MOUNT_ACCORDION,
       (ev: CustomEvent) => {
         const _nodes: N[] = ev.detail;
         queueMicrotask(() => {
-          _nodes.forEach((n) => REGISTRY.get(n.$ref).setMounted(true));
+          _nodes.forEach((n) => {
+            const _reg = REGISTRY.get(n.$ref);
+            _reg.setMounted(true);
+          });
         });
       },
     ],
@@ -53,8 +58,8 @@ class SkelaProcessEvents {
       CHILDREN_HYDRATE,
       (ev: CustomEvent) =>
         queueMicrotask(() =>
-          (ev.detail as N[]).forEach(
-            (c) => void (REGISTRY.get(c.$ref) as F).hydrate()
+          (ev.detail as N[]).forEach((c) =>
+            (REGISTRY.get(c.$ref) as F).hydrate()
           )
         ),
     ],

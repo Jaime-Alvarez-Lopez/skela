@@ -52,19 +52,21 @@ export default class Fragment extends Key implements F {
         )
       );
     if (this.#el instanceof Text && this.#props) {
-      this.#el.deleteData(0, this.#el.data.length);
-      this.#el.insertData(
-        0,
-        isFunction(this.#props) ? this.#props() : this.#props
-      );
+      this.#el.deleteData(0, this.#el.data.length),
+        this.#el.insertData(
+          0,
+          isFunction(this.#props) ? this.#props() : this.#props
+        );
     }
     if (this.hasChildren) DISPATCHER(CHILDREN_HYDRATE, this.#children);
   }
   public setMounted(mounted: boolean) {
     if (mounted === this.#mounted) return;
-    if (mounted && this.#cycle.onmount) {
-      DISPATCHER(FRAGMENT_SIDE_EFFECT, this.#cycle.onmount);
-      if (this.hasChildren) DISPATCHER(FRAGMENT_MOUNT_ACCORDION, this.#children);
+    if (mounted) {
+      if (this.hasChildren)
+        DISPATCHER(FRAGMENT_MOUNT_ACCORDION, this.#children);
+      if (this.#cycle.onmount)
+        DISPATCHER(FRAGMENT_SIDE_EFFECT, this.#cycle.onmount);
     }
     this.#mounted = mounted;
   }
