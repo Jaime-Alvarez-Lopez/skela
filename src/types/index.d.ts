@@ -7,17 +7,21 @@ declare abstract class F {
   public abstract get hasChildren(): boolean;
   public abstract get children(): N[];
   public abstract get props(): any;
-  public abstract get owner(): any;
-  public abstract render(target?: HTMLElement | F): void;
-  public abstract set _owner(owner: symbol);
+  public abstract render(target?: HTMLElement | F | N): void;
   public abstract hydrate(): void;
 }
+
+/**
+ *  Represents a vnode. References a fragment.
+ */
 declare abstract class N {
+  constructor(ref: symbol);
   public abstract get $ref(): symbol;
   public abstract access(key: symbol): CallableFunction | null;
 }
 
 declare abstract class Subscription {
+  public abstract get subscriptions(): symbol[];
   public abstract subscribe(ref: symbol): void;
 }
 type FragmentSubscription = (ref: symbol) => void;
@@ -32,7 +36,7 @@ type StateExecutors =
   | [
       getter: () => any,
       setter: (nextState: (lastState: any) => any) => void,
-      subscription: FragmentSubscription
+      subscribe: FragmentSubscription
     ]
   | [getter: () => any, setter: (nextState: (lastState: any) => any) => void];
 

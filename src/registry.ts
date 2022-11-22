@@ -1,7 +1,7 @@
 import Fragment from "./fragment";
 
 class Registry {
-  #reg = new Map();
+  readonly #reg = new Map();
 
   set(fragment: F) {
     if (!(fragment instanceof Fragment)) return;

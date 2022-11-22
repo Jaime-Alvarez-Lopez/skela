@@ -7,11 +7,11 @@ export const FRAGMENT_RENDER = "FRAGMENT_RENDER";
 export const APPEND_ELEMENT_CHILDS = "APPEND_ELEMENT_CHILDS";
 export const CHILDREN_HYDRATE = "CHILDREN_HYDRATE";
 export const STATE_UPDATE = "STATE_UPDATE";
-export const FRAGMENT_REQUEST = "FRAGMENT_REQUEST";
+export const FRAGMENT_SIDE_EFFECT = "FRAGMENT_SIDE_EFFECT";
 
-class SkelaAppEvents {
+class SkelaProcessEvents {
   static #events = new Map([
-    [VNODE_INSTANCE, (ev: CustomEvent) => REGISTRY.set(ev.detail) as void],
+    [VNODE_INSTANCE, (ev: CustomEvent) => void REGISTRY.set(ev.detail)],
     [
       APPEND_ELEMENT_CHILDS,
       (ev: CustomEvent) =>
@@ -39,8 +39,8 @@ class SkelaAppEvents {
       CHILDREN_HYDRATE,
       (ev: CustomEvent) =>
         void queueMicrotask(() =>
-          (ev.detail as N[]).forEach((c) =>
-            (REGISTRY.get(c.$ref) as F).hydrate()
+          (ev.detail as N[]).forEach(
+            (c) => void (REGISTRY.get(c.$ref) as F).hydrate()
           )
         ),
     ],
@@ -48,15 +48,12 @@ class SkelaAppEvents {
       STATE_UPDATE,
       (ev: CustomEvent) =>
         void queueMicrotask(() => {
-          const targets: symbol[] = ev.detail;
-          targets.forEach((t) => {
-            void (REGISTRY.get(t) as F).hydrate();
-            // void t.hydrate();
-          });
+          const updateTargets: symbol[] = ev.detail;
+          updateTargets.forEach((t) => void (REGISTRY.get(t) as F).hydrate());
         }),
     ],
     [
-      FRAGMENT_REQUEST,
+      FRAGMENT_SIDE_EFFECT,
       (ev: CustomEvent) =>
         void queueMicrotask(async () => {
           const cb: CallableFunction = ev.detail;
@@ -75,19 +72,18 @@ class Dispatcher {
   constructor() {
     throw new Error("Illegal constructor");
   }
-  public static dispatch(ev, data) {
+  public static dispatch(ev: string, data: any) {
     const Event = new CustomEvent(ev, {
       detail: data,
       cancelable: false,
       bubbles: false,
     });
-
     return void window.dispatchEvent(Event);
   }
 }
 
-const DISPATCH = Dispatcher.dispatch.bind(Dispatcher);
+SkelaProcessEvents.applyEvents();
 
-SkelaAppEvents.applyEvents();
+const DISPATCHERER = Dispatcher.dispatch.bind(Dispatcher);
 
-export default DISPATCH;
+export default DISPATCHERER;
