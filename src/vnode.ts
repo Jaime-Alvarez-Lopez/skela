@@ -16,5 +16,5 @@ export function vNode(
   {
     DISPATCHER(VNODE_INSTANCE, fragment);
   }
-  return new Node(fragment.$ref);
+  return new Node(fragment.key);
 }

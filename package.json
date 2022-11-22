@@ -11,9 +11,11 @@
     "interface"
   ],
   "author": "@jaime-alvarez",
+  "homepage": "https://github.com/Jaime-Alvarez-Lopez/skela#readme",
   "types": "dist/index.d.ts",
-  "files": [
-    "/dist"
-  ],
-  "license": "ISC"
+  "files": ["/dist"],
+  "license": "ISC",
+  "scripts": {
+    "dist": "tsc"
+  }
 }

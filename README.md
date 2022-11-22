@@ -49,7 +49,7 @@ function Component() {
 
   return Container(
     {
-      subscriptions: [dataSub, load],
+      subscriptions: [dataSubscription, loadSubscription],
       onmount: req,
     },
     Container(

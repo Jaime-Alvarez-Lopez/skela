@@ -1,9 +1,10 @@
 type FragmentProps = Props | (() => Props | string) | string | null;
 
-declare abstract class F {
+declare abstract class F extends KeyedRef {
   constructor(tag: string, props: FragmentProps, children: N[]);
   public abstract get $el(): HTMLElement | Text;
-  public abstract get $ref(): symbol;
+  public abstract get key(): symbol;
+  public abstract get customKey(): KeyedRef | null;
   public abstract get hasChildren(): boolean;
   public abstract get children(): N[];
   public abstract get props(): any;
@@ -31,6 +32,10 @@ declare abstract class StateMiddleware extends Subscription {
   public abstract setState(nextState: any | ((lastState: any) => any)): void;
 }
 
+declare abstract class KeyedRef {
+  constructor(namespace: string);
+  public get key(): symbol;
+}
 type StateExecutors =
   | [
       getter: () => any,
@@ -145,5 +150,6 @@ type ElementAssignableAtributeProps = HTMLAtributes & EventAtributes;
 type Props = HTMLAtributes &
   EventAtributes & {
     onmount?: CallableFunction;
+    key?: KeyedRef;
     subscriptions?: ((ref: symbol) => void)[];
   };

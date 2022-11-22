@@ -1,7 +1,7 @@
 import Fragment from "./fragment";
 import Node from "./node";
 import REGISTRY from "./registry";
-import { isSymbol } from "./utils";
+import { isArray, isSymbol } from "./utils";
 
 export const VNODE_INSTANCE = "VNODE_INSTANCE";
 export const FRAGMENT_RENDER = "FRAGMENT_RENDER";
@@ -35,7 +35,7 @@ class SkelaProcessEvents {
           if (!target) document.body.appendChild(_fr.$el);
           if (target instanceof Fragment) target.$el.appendChild(_fr.$el);
           if (target instanceof Node)
-            REGISTRY.get(_fr.$ref).$el.appendChild(fragment.$el);
+            REGISTRY.get(_fr.key).$el.appendChild(fragment.$el);
         }),
     ],
     [
@@ -52,7 +52,8 @@ class SkelaProcessEvents {
       (ev: CustomEvent) =>
         void queueMicrotask(() => {
           const updateTargets: symbol[] = ev.detail;
-          updateTargets.forEach((t) => void (REGISTRY.get(t) as F).hydrate());
+          if (isArray(updateTargets))
+            updateTargets.forEach((t) => void (REGISTRY.get(t) as F).hydrate());
         }),
     ],
     [

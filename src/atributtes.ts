@@ -3,6 +3,7 @@ import { isObject } from "./utils";
 enum RestrictedProps {
   subscriptions = "subscriptions",
   onmount = "onmount",
+  key = "key",
 }
 enum HTMLProps {
   id = "id",
