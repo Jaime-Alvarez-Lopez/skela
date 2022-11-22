@@ -1,11 +1,19 @@
 {
   "name": "@jaime-alvarez/skela",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An easy, small and fast 0 dependency statefull framework written in TypeScript.",
   "main": "dist/index.js",
-  "keywords": ["framework","front","frontend","web","interface"],
+  "keywords": [
+    "framework",
+    "front",
+    "frontend",
+    "web",
+    "interface"
+  ],
   "author": "@jaime-alvarez",
   "types": "dist/index.d.ts",
-  "files": ["/dist"],
+  "files": [
+    "/dist"
+  ],
   "license": "ISC"
 }
