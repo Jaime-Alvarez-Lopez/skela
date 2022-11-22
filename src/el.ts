@@ -1,4 +1,4 @@
-export default function cEl(type: string, props: any): HTMLElement | any {
+export default function cEl(type: string, props?: any): HTMLElement | Text {
   let _cEl = document.createElement.bind(document);
   let _cTx = document.createTextNode.bind(document);
   switch (type) {

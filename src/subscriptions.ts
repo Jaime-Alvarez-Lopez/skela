@@ -46,7 +46,6 @@ export function createState(
   const _state = new State(initialValue, observed);
   const getter = _state.getState.bind(_state);
   const setter = _state.setState.bind(_state);
-  return observed
-    ? [getter, setter, _state.subscribe.bind(_state)]
-    : [getter, setter];
+  const subscibe = _state.subscribe.bind(_state);
+  return observed ? [getter, setter, subscibe] : [getter, setter];
 }

@@ -1,6 +1,7 @@
 import Fragment from "./fragment";
 import Node from "./node";
 import REGISTRY from "./registry";
+import { isSymbol } from "./utils";
 
 export const VNODE_INSTANCE = "VNODE_INSTANCE";
 export const FRAGMENT_RENDER = "FRAGMENT_RENDER";
@@ -27,12 +28,14 @@ class SkelaProcessEvents {
       (ev: CustomEvent) =>
         void queueMicrotask(() => {
           const { target, fragment } = ev.detail;
-          if (!fragment && !(fragment instanceof Fragment)) return;
-          if (!target) document.body.appendChild((fragment as F).$el);
-          if (target instanceof Fragment)
-            target.$el.appendChild((fragment as F).$el);
+          if (!fragment) return;
+          let _fr = fragment;
+          if (isSymbol(_fr) && REGISTRY.has(_fr)) _fr = REGISTRY.get(_fr) as F;
+          if (!(_fr instanceof Fragment)) return;
+          if (!target) document.body.appendChild(_fr.$el);
+          if (target instanceof Fragment) target.$el.appendChild(_fr.$el);
           if (target instanceof Node)
-            REGISTRY.get((target as N).$ref).$el.appendChild(fragment.$el);
+            REGISTRY.get(_fr.$ref).$el.appendChild(fragment.$el);
         }),
     ],
     [
@@ -84,6 +87,6 @@ class Dispatcher {
 
 SkelaProcessEvents.applyEvents();
 
-const DISPATCHERER = Dispatcher.dispatch.bind(Dispatcher);
+const DISPATCHER = Dispatcher.dispatch.bind(Dispatcher);
 
-export default DISPATCHERER;
+export default DISPATCHER;

@@ -2,10 +2,8 @@ import { attrs, filterRestrictedAtributes } from "./atributtes";
 import DISPATCHER, {
   APPEND_ELEMENT_CHILDS,
   CHILDREN_HYDRATE,
-  FRAGMENT_RENDER,
-  FRAGMENT_SIDE_EFFECT,
+  FRAGMENT_SIDE_EFFECT
 } from "./dispatcher";
-
 import cEl from "./el";
 import { isArray, isFunction, isObject, sanityzeProps } from "./utils";
 
@@ -15,7 +13,7 @@ import { isArray, isFunction, isObject, sanityzeProps } from "./utils";
  */
 export default class Fragment implements F {
   readonly #ref: symbol = Symbol("$fragment$");
-  #el: HTMLElement;
+  #el: HTMLElement | Text;
   #props: FragmentProps | any;
   #children: N[];
   /**
@@ -37,8 +35,6 @@ export default class Fragment implements F {
     }
   }
   public hydrate(): void {
-    // TODO: clean this a little
-
     if (this.#el instanceof HTMLElement && this.#props)
       attrs(
         this.#el,
@@ -69,9 +65,5 @@ export default class Fragment implements F {
   }
   public get $el() {
     return this.#el;
-  }
-  public render(target?: HTMLElement | F | N) {
-    this.hydrate();
-    DISPATCHER(FRAGMENT_RENDER, { target: target, fragment: this });
   }
 }

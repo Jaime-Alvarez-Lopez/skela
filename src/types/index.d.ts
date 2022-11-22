@@ -2,12 +2,11 @@ type FragmentProps = Props | (() => Props | string) | string | null;
 
 declare abstract class F {
   constructor(tag: string, props: FragmentProps, children: N[]);
-  public abstract get $el(): HTMLElement;
+  public abstract get $el(): HTMLElement | Text;
   public abstract get $ref(): symbol;
   public abstract get hasChildren(): boolean;
   public abstract get children(): N[];
   public abstract get props(): any;
-  public abstract render(target?: HTMLElement | F | N): void;
   public abstract hydrate(): void;
 }
 
@@ -17,7 +16,7 @@ declare abstract class F {
 declare abstract class N {
   constructor(ref: symbol);
   public abstract get $ref(): symbol;
-  public abstract access(key: symbol): CallableFunction | null;
+  public abstract paint(target?: HTMLElement | F | N): void;
 }
 
 declare abstract class Subscription {

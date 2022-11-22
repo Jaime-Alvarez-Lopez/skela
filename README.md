@@ -3,50 +3,41 @@
 This package provides an easy,fast and lightweight statefull framework with no dependencies for developers to create user interfaces with.
 
 ```javascript
-import { Container, H1, $RENDER, $NO_PROPS, Text } from "@jaime-alvarez/skela";
+import { Container, H1, Text } from "@jaime-alvarez/skela";
 
 const myComponent = Container(
   {
     id: "main",
   },
-  H1($NO_PROPS, Text("Hello, World!"))
+  H1({ className: "world" }, Text("Hello, World!"))
 );
 
-myComponent.access($RENDER)();
+myComponent.paint();
 ```
 
 Results into this:
 
 ```html
-<body>
-  <div id="main">
-    <h1>Hello, World!</h1>
-  </div>
-</body>
+<div id="main">
+  <h1 class="world">Hello, World!</h1>
+</div>
 ```
 
 A simple component that fetches from an API:
 
 ```javascript
-import {
-  $RENDER,
-  Container,
-  H1,
-  Button,
-  Text,
-  createState,
-} from "@jaime-alvarez/skela";
+import { Container, H1, Button, Text, createState } from "@jaime-alvarez/skela";
 
-const URL = "https://catfact.ninja/fact";
+const API_URL = "https://catfact.ninja/fact";
 
 function Component() {
-  const [data, setData, dataSub] = createState("", true);
-  const [isLoading, setIsLoading, loadSub] = createState(false, true);
+  const [data, setData, dataSubscription] = createState("", true);
+  const [isLoading, setIsLoading, loadSubscription] = createState(false, true);
 
   const req = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(URL);
+      const res = await fetch(API_URL);
       const _json = await res.json();
       setData(_json.fact);
     } catch (e) {
@@ -58,34 +49,47 @@ function Component() {
 
   return Container(
     {
-      subscriptions: [dataSub, loadSub],
+      subscriptions: [dataSub, load],
+      onmount: req,
     },
-    H1(
+    Container(
       {
-        onmount: req,
+        style: "padding: 10px;",
       },
-      Text(() => data())
+      H1(
+        {
+          className: "cat-fact",
+        },
+        Text(() => data())
+      )
     ),
-    Button(
-      () => (isLoading() ? { disabled: "" } : { onclick: req }),
-      Text("Fetch new")
+    Container(
+      {
+        style: "padding: 10px;",
+      },
+      Button(
+        () => (isLoading() ? { disabled: "" } : { onclick: req }),
+        Text("Fetch new")
+      )
     )
   );
 }
 
-Component().access($RENDER)();
+Component().paint();
 ```
 
 Results into:
 
 ```html
-<body>
-  <div>
-    <h1>
-      When a domestic cat goes after mice, about 1 pounce in 3 results in a
-      catch.
+<div>
+  <div style="padding: 10px;">
+    <h1 class="cat-fact">
+      A cat almost never meows at another cat, mostly just humans. Cats
+      typically will spit, purr, and hiss at other cats.
     </h1>
+  </div>
+  <div style="padding: 10px;">
     <button>Fetch new</button>
   </div>
-</body>
+</div>
 ```
