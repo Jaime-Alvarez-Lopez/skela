@@ -7,7 +7,7 @@ import DISPATCHER, {
 } from "./dispatcher";
 
 import cEl from "./el";
-import { isArray, isObject, sanityzeProps } from "./utils";
+import { isArray, isFunction, isObject, sanityzeProps } from "./utils";
 
 /**
  *  Represents an htmlelement.
@@ -43,14 +43,14 @@ export default class Fragment implements F {
       attrs(
         this.#el,
         filterRestrictedAtributes(
-          typeof this.#props === "function" ? this.#props() : this.#props
+          isFunction(this.#props) ? this.#props() : this.#props
         )
       );
     if (this.#el instanceof Text && this.#props) {
       this.#el.deleteData(0, this.#el.data.length);
       this.#el.insertData(
         0,
-        typeof this.#props === "function" ? this.#props() : this.#props
+        isFunction(this.#props) ? this.#props() : this.#props
       );
     }
     if (this.hasChildren) DISPATCHER(CHILDREN_HYDRATE, this.#children);

@@ -1,5 +1,6 @@
 import REGISTRY from "./registry";
 import { $RENDER } from "./symbols";
+import { isSymbol } from "./utils";
 
 /**
  *  Represents a vnode. References a fragment.
@@ -17,7 +18,7 @@ export default class Node implements N {
     return this.#ref;
   }
   public access(key: symbol): CallableFunction | null {
-    if (typeof key !== "symbol")
+    if (isSymbol(key))
       throw new Error(
         "Unrecognized key of type " +
           typeof key +

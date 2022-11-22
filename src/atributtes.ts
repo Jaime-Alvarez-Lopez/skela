@@ -1,3 +1,5 @@
+import { isObject } from "./utils";
+
 enum RestrictedProps {
   subscriptions = "subscriptions",
   onmount = "onmount",
@@ -112,7 +114,7 @@ export function filterRestrictedAtributes(att: Props) {
 }
 
 export function attrs(el: HTMLElement, props: ElementAssignableAtributeProps) {
-  if (typeof props === "object" && !Array.isArray(props)) {
+  if (isObject(props)) {
     const at = Array.from(el.attributes);
     at.forEach((k) => {
       if (!(k.nodeName in props)) el.removeAttribute(k.nodeName);

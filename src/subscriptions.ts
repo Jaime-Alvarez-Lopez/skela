@@ -1,5 +1,5 @@
 import DISPATCHER, { STATE_UPDATE } from "./dispatcher";
-import { isSymbol } from "./utils";
+import { isFunction, isSymbol } from "./utils";
 
 class MiddlewareSubscription implements Subscription {
   readonly #subscripted = new Set<symbol>();
@@ -29,7 +29,7 @@ class State extends MiddlewareSubscription implements StateMiddleware {
     return this.#state;
   }
   public setState(nextState: any | ((lastState: any) => any)): void {
-    if (typeof nextState === "function") this.#state = nextState(this.#state);
+    if (isFunction(nextState)) this.#state = nextState(this.#state);
     else this.#state = nextState;
     if (this.#observed) DISPATCHER(STATE_UPDATE, this.subscriptions);
   }
