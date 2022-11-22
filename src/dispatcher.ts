@@ -5,6 +5,7 @@ import { isArray, isSymbol } from "./utils";
 
 export const VNODE_INSTANCE = "VNODE_INSTANCE";
 export const FRAGMENT_RENDER = "FRAGMENT_RENDER";
+export const FRAGMENT_MOUNT_ACCORDION = "FRAGMENT_MOUNT_ACCORDION";
 export const APPEND_ELEMENT_CHILDS = "APPEND_ELEMENT_CHILDS";
 export const CHILDREN_HYDRATE = "CHILDREN_HYDRATE";
 export const STATE_UPDATE = "STATE_UPDATE";
@@ -12,11 +13,11 @@ export const FRAGMENT_SIDE_EFFECT = "FRAGMENT_SIDE_EFFECT";
 
 class SkelaProcessEvents {
   static #events = new Map([
-    [VNODE_INSTANCE, (ev: CustomEvent) => void REGISTRY.set(ev.detail)],
+    [VNODE_INSTANCE, (ev: CustomEvent) => REGISTRY.set(ev.detail)],
     [
       APPEND_ELEMENT_CHILDS,
       (ev: CustomEvent) =>
-        void queueMicrotask(() => {
+        queueMicrotask(() => {
           const fragment: F = ev.detail;
           fragment.children.forEach((c) =>
             fragment.$el.appendChild(REGISTRY.get(c.$ref).$el)
@@ -26,7 +27,7 @@ class SkelaProcessEvents {
     [
       FRAGMENT_RENDER,
       (ev: CustomEvent) =>
-        void queueMicrotask(() => {
+        queueMicrotask(() => {
           const { target, fragment } = ev.detail;
           if (!fragment) return;
           let _fr = fragment;
@@ -36,12 +37,22 @@ class SkelaProcessEvents {
           if (target instanceof Fragment) target.$el.appendChild(_fr.$el);
           if (target instanceof Node)
             REGISTRY.get(_fr.key).$el.appendChild(fragment.$el);
+          _fr.setMounted(true);
         }),
+    ],
+    [
+      FRAGMENT_MOUNT_ACCORDION,
+      (ev: CustomEvent) => {
+        const _nodes: N[] = ev.detail;
+        queueMicrotask(() => {
+          _nodes.forEach((n) => REGISTRY.get(n.$ref).setMounted(true));
+        });
+      },
     ],
     [
       CHILDREN_HYDRATE,
       (ev: CustomEvent) =>
-        void queueMicrotask(() =>
+        queueMicrotask(() =>
           (ev.detail as N[]).forEach(
             (c) => void (REGISTRY.get(c.$ref) as F).hydrate()
           )
@@ -50,7 +61,7 @@ class SkelaProcessEvents {
     [
       STATE_UPDATE,
       (ev: CustomEvent) =>
-        void queueMicrotask(() => {
+        queueMicrotask(() => {
           const updateTargets: symbol[] = ev.detail;
           if (isArray(updateTargets))
             updateTargets.forEach((t) => void (REGISTRY.get(t) as F).hydrate());
@@ -58,11 +69,10 @@ class SkelaProcessEvents {
     ],
     [
       FRAGMENT_SIDE_EFFECT,
-      (ev: CustomEvent) =>
-        void queueMicrotask(async () => {
-          const cb: CallableFunction = ev.detail;
-          await cb();
-        }),
+      (ev: CustomEvent) => {
+        const cb: () => void = ev.detail;
+        queueMicrotask(cb);
+      },
     ],
   ]);
   static applyEvents() {

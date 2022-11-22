@@ -1,6 +1,6 @@
 # Skela
 
-This package provides an easy,fast and lightweight statefull library with 0 dependencies for developers to create user interfaces with.
+This package provides a simple, fast and lightweight statefull library with 0 dependencies for developers to create user interfaces with.
 
 ```javascript
 import { Container, H1, Text } from "@jaime-alvarez/skela";

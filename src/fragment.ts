@@ -3,6 +3,7 @@ import { attrs, filterRestrictedAtributes } from "./atributtes";
 import DISPATCHER, {
   APPEND_ELEMENT_CHILDS,
   CHILDREN_HYDRATE,
+  FRAGMENT_MOUNT_ACCORDION,
   FRAGMENT_SIDE_EFFECT,
 } from "./dispatcher";
 import cEl from "./el";
@@ -17,6 +18,11 @@ export default class Fragment extends Key implements F {
   #props: FragmentProps | any;
   #children: N[];
   #customKey: null | KeyedRef = null;
+  #mounted = false;
+  #cycle: { onmount: (() => void) | null; onunmount: (() => void) | null } = {
+    onmount: null,
+    onunmount: null,
+  };
   /**
    *  @param {string} tag
    *  @param {FragmentProps} props
@@ -33,7 +39,7 @@ export default class Fragment extends Key implements F {
         const _p = this.#props as Props;
         if (_p.key && _p.key instanceof Key) this.#customKey = _p.key;
         if (_p.subscriptions) _p.subscriptions.forEach((s) => s(this.key));
-        if (_p.onmount) DISPATCHER(FRAGMENT_SIDE_EFFECT, _p.onmount);
+        if (_p.onmount) this.#cycle.onmount = _p.onmount;
       }
     }
   }
@@ -53,6 +59,14 @@ export default class Fragment extends Key implements F {
       );
     }
     if (this.hasChildren) DISPATCHER(CHILDREN_HYDRATE, this.#children);
+  }
+  public setMounted(mounted: boolean) {
+    if (mounted === this.#mounted) return;
+    if (mounted && this.#cycle.onmount) {
+      DISPATCHER(FRAGMENT_SIDE_EFFECT, this.#cycle.onmount);
+      if (this.hasChildren) DISPATCHER(FRAGMENT_MOUNT_ACCORDION, this.#children);
+    }
+    this.#mounted = mounted;
   }
   public get props(): any {
     return this.#props;

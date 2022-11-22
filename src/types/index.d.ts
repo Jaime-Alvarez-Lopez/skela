@@ -8,6 +8,7 @@ declare abstract class F extends KeyedRef {
   public abstract get hasChildren(): boolean;
   public abstract get children(): N[];
   public abstract get props(): any;
+  public abstract setMounted(mounted: boolean): void;
   public abstract hydrate(): void;
 }
 
@@ -149,7 +150,7 @@ type ElementAssignableAtributeProps = HTMLAtributes & EventAtributes;
 
 type Props = HTMLAtributes &
   EventAtributes & {
-    onmount?: CallableFunction;
+    onmount?: () => void;
     key?: KeyedRef;
     subscriptions?: ((ref: symbol) => void)[];
   };
