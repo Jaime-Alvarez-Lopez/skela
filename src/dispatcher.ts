@@ -37,10 +37,8 @@ class SkelaProcessEvents {
         if (!fragment) return;
         queueMicrotask(() => {
           let _fr: any = fragment;
-          console.log(_fr);
           if (isSymbol(_fr) && REGISTRY.has(_fr)) _fr = REGISTRY.get(_fr) as F;
           if (!(_fr instanceof Fragment)) return;
-          console.log(_fr);
           if (_fr.mounted) return;
           const _target = !target
             ? document.body
