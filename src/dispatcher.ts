@@ -5,7 +5,10 @@ import { isArray, isSymbol } from "./utils";
 
 export const VNODE_INSTANCE = "VNODE_INSTANCE";
 export const FRAGMENT_RENDER = "FRAGMENT_RENDER";
+export const FRAGMENT_NORENDER = "FRAGMENT_NORENDER";
 export const FRAGMENT_MOUNT_ACCORDION = "FRAGMENT_MOUNT_ACCORDION";
+export const FRAGMENT_UNMOUNT_ACCORDION = "FRAGMENT_UNMOUNT_ACCORDION";
+
 export const APPEND_ELEMENT_CHILDS = "APPEND_ELEMENT_CHILDS";
 export const CHILDREN_HYDRATE = "CHILDREN_HYDRATE";
 export const STATE_UPDATE = "STATE_UPDATE";
@@ -30,15 +33,35 @@ class SkelaProcessEvents {
         const { target, fragment } = ev.detail;
         if (!fragment) return;
         queueMicrotask(() => {
-          let _fr = fragment;
+          let _fr: any = fragment;
+          console.log(_fr);
           if (isSymbol(_fr) && REGISTRY.has(_fr)) _fr = REGISTRY.get(_fr) as F;
           if (!(_fr instanceof Fragment)) return;
-          queueMicrotask(() => _fr.hydrate());
+          console.log(_fr);
+          if (_fr.mounted) return;
           if (!target) document.body.appendChild(_fr.$el);
           if (target instanceof Fragment) target.$el.appendChild(_fr.$el);
           if (target instanceof Node)
             REGISTRY.get(_fr.key).$el.appendChild(fragment.$el);
           _fr.setMounted(true);
+          queueMicrotask(() => _fr.hydrate());
+        });
+      },
+    ],
+    [
+      FRAGMENT_NORENDER,
+      (ev: CustomEvent) => {
+        const { fragment } = ev.detail;
+        if (!fragment) return;
+        queueMicrotask(() => {
+          let _fr: any = fragment;
+          if (isSymbol(_fr)) _fr = REGISTRY.get(_fr);
+          if (!(_fr instanceof Fragment)) return;
+          if (!_fr.mounted) return;
+          const parent = _fr.$el.parentElement;
+          if (!parent) return;
+          parent.removeChild(_fr.$el);
+          _fr.setMounted(false);
         });
       },
     ],
@@ -50,6 +73,18 @@ class SkelaProcessEvents {
           _nodes.forEach((n) => {
             const _reg = REGISTRY.get(n.$ref);
             _reg.setMounted(true);
+          });
+        });
+      },
+    ],
+    [
+      FRAGMENT_UNMOUNT_ACCORDION,
+      (ev: CustomEvent) => {
+        const _nodes: N[] = ev.detail;
+        queueMicrotask(() => {
+          _nodes.forEach((n) => {
+            const _reg = REGISTRY.get(n.$ref);
+            _reg.setMounted(false);
           });
         });
       },

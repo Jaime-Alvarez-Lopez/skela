@@ -9,6 +9,7 @@ declare abstract class F extends KeyedRef {
   public abstract get children(): N[];
   public abstract get props(): any;
   public abstract setMounted(mounted: boolean): void;
+  public abstract get mounted(): boolean;
   public abstract hydrate(): void;
 }
 
@@ -19,6 +20,7 @@ declare abstract class N {
   constructor(ref: symbol);
   public abstract get $ref(): symbol;
   public abstract paint(target?: HTMLElement | F | N): void;
+  public abstract unpaint(): void;
 }
 
 declare abstract class Subscription {
@@ -36,6 +38,11 @@ declare abstract class StateMiddleware extends Subscription {
 declare abstract class KeyedRef {
   constructor(namespace: string);
   public get key(): symbol;
+}
+
+declare abstract class TreeRegistry {
+  public static getElement(key: symbol): HTMLElement | null;
+  public static getNode(key: symbol): Node | null;
 }
 type StateExecutors =
   | [
@@ -151,6 +158,7 @@ type ElementAssignableAtributeProps = HTMLAtributes & EventAtributes;
 type Props = HTMLAtributes &
   EventAtributes & {
     onmount?: () => void;
+    onunmount?: () => void;
     key?: KeyedRef;
     subscriptions?: ((ref: symbol) => void)[];
   };

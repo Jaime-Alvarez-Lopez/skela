@@ -5,6 +5,7 @@ import DISPATCHER, {
   CHILDREN_HYDRATE,
   FRAGMENT_MOUNT_ACCORDION,
   FRAGMENT_SIDE_EFFECT,
+  FRAGMENT_UNMOUNT_ACCORDION,
 } from "./dispatcher";
 import cEl from "./el";
 import { isArray, isFunction, isObject, sanityzeProps } from "./utils";
@@ -39,7 +40,8 @@ export default class Fragment extends Key implements F {
         const _p = this.#props as Props;
         if (_p.key && _p.key instanceof Key) this.#customKey = _p.key;
         if (_p.subscriptions) _p.subscriptions.forEach((s) => s(this.key));
-        if (_p.onmount) this.#cycle.onmount = _p.onmount;
+        if (_p.onmount) this.#cycle.onmount = _p.onmount as () => void;
+        if (_p.onunmount) this.#cycle.onunmount = _p.onunmount as () => void;
       }
     }
   }
@@ -67,8 +69,16 @@ export default class Fragment extends Key implements F {
         DISPATCHER(FRAGMENT_MOUNT_ACCORDION, this.#children);
       if (this.#cycle.onmount)
         DISPATCHER(FRAGMENT_SIDE_EFFECT, this.#cycle.onmount);
+    } else {
+      if (this.hasChildren)
+        DISPATCHER(FRAGMENT_UNMOUNT_ACCORDION, this.#children);
+      if (this.#cycle.onunmount)
+        DISPATCHER(FRAGMENT_SIDE_EFFECT, this.#cycle.onunmount);
     }
     this.#mounted = mounted;
+  }
+  public get mounted() {
+    return this.#mounted;
   }
   public get props(): any {
     return this.#props;
