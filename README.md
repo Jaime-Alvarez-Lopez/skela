@@ -13,6 +13,9 @@ const myComponent = Container(
 );
 
 myComponent.paint();
+// Paint can receive an HTMLElement or a Node as argument
+//  Calling paint with no argument will mount on document.body
+// NOTE: painting a node into another one won't make this node a direct child of it.
 ```
 
 Results into this:
@@ -94,67 +97,79 @@ Results into:
 </div>
 ```
 
-Mounting:
+Mounting and unounting components:
 
 ```javascript
-import { Container, H1, Text, $NO_PROPS } from "@jaime-alvarez/skela";
+import {
+  Container,
+  H1,
+  Text,
+  Tree,
+  createState,
+  createKey,
+  $NO_PROPS,
+} from "@jaime-alvarez/skela";
 
-const title = H1($NO_PROPS, Text("Hello, World!"));
+function MountAndUnmountComponent() {
+  const [mounted, setMounted, mountedSub] = createState(true, true);
 
-const container = Container({ id: "main" });
+  const myComponentKey = createKey();
 
-title.paint(container);
+  return Container(
+    { id: "main", subscriptions: [mountedSub] },
+    H1(
+      {
+        key: myComponentKey,
+      },
+      Text("Hello,")
+    ),
+    H1($NO_PROPS, Text("Wolrd!")),
+    Button(
+      {
+        onclick: () => {
+          const t = Tree.getNode(myComponentKey);
+          if (mounted()) {
+            t.unpaint();
+            setMounted(false);
+          } else {
+            t.paint();
+            setMounted(true);
+          }
+        },
+      },
+      Text(() => (mounted() ? "Unmount" : "Mount"))
+    )
+  );
+}
 
-container.paint();
-//  Calling paint with no argument will mount on document.body
-// NOTE: painting a node into another one won't make this node a direct child of it.
-```
-
-Result:
-
-```html
-<div id="main">
-  <h1>Hello, World!</h1>
-</div>
-```
-
-Unmounting:
-
-```javascript
-import { Container, H1, Text, createFragmentKey } from "@jaime-alvarez/skela";
-
-const myComponentKey = createFragmentKey();
-
-const container = Container(
-  { id: "main" },
-  H1(
-    {
-      key: myComponentKey,
-    },
-    Text("Hello, World!")
-  ),
-  Button(
-    { onclick: () => Tree.getNode(myComponentKey)?.unpaint() },
-    Text("Unmount")
-  )
-);
-
-container.paint();
+MountAndUnmountComponent().paint();
 ```
 
 Results into:
 
 ```html
 <div id="main">
-  <h1>Hello, World!</h1>
+  <h1>Hello,</h1>
+  <h1>World!</h1>
   <button>Unmount</button>
 </div>
 ```
 
-After button click:
+After first button click:
 
 ```html
 <div id="main">
+  <h1>World!</h1>
+  <button>Unmount</button>
+</div>
+```
+
+After second button click:
+
+```html
+<div id="main">
+  <h1>Hello,</h1>
+  <h1>World!</h1>
   <button>Unmount</button>
 </div>
 ```

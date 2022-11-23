@@ -9,6 +9,7 @@ import DISPATCHER, {
 } from "./dispatcher";
 import cEl from "./el";
 import { isArray, isFunction, isObject, sanityzeProps } from "./utils";
+import REGISTRY from "./registry";
 
 /**
  *  Represents an htmlelement.
@@ -24,6 +25,7 @@ export default class Fragment extends Key implements F {
     onmount: null,
     onunmount: null,
   };
+  #index: number = 0;
   /**
    *  @param {string} tag
    *  @param {FragmentProps} props
@@ -38,12 +40,24 @@ export default class Fragment extends Key implements F {
       if (this.hasChildren) DISPATCHER(APPEND_ELEMENT_CHILDS, this);
       if (isObject(this.#props)) {
         const _p = this.#props as Props;
-        if (_p.key && _p.key instanceof Key) this.#customKey = _p.key;
+        if (_p.key && _p.key instanceof Key) {
+          if (REGISTRY.hasWhere((v) => v.customKey === _p.key))
+            throw new Error(
+              "A Node has already been referenced with this key. Plese provide a different key."
+            );
+          this.#customKey = _p.key;
+        }
         if (_p.subscriptions) _p.subscriptions.forEach((s) => s(this.key));
         if (_p.onmount) this.#cycle.onmount = _p.onmount as () => void;
         if (_p.onunmount) this.#cycle.onunmount = _p.onunmount as () => void;
       }
     }
+  }
+  public setIndexAt(index: number): void {
+    this.#index = index;
+  }
+  public get indexedAt(): number {
+    return this.#index;
   }
   public hydrate(): void {
     if (this.#el instanceof HTMLElement && this.#props)

@@ -10,6 +10,8 @@ declare abstract class F extends KeyedRef {
   public abstract get props(): any;
   public abstract setMounted(mounted: boolean): void;
   public abstract get mounted(): boolean;
+  public abstract setIndexAt(index: number): void;
+  public abstract get indexedAt(): number;
   public abstract hydrate(): void;
 }
 

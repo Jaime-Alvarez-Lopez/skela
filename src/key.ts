@@ -7,6 +7,7 @@ export class Key implements KeyedRef {
     return this.#ref;
   }
 }
-export default function createFragmentKey(): Key {
+
+export default function createKey(): Key {
   return new Key("fragment.custom");
 }

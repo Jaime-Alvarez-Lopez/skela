@@ -13,6 +13,7 @@ export const APPEND_ELEMENT_CHILDS = "APPEND_ELEMENT_CHILDS";
 export const CHILDREN_HYDRATE = "CHILDREN_HYDRATE";
 export const STATE_UPDATE = "STATE_UPDATE";
 export const FRAGMENT_SIDE_EFFECT = "FRAGMENT_SIDE_EFFECT";
+export const FRAGMENT_APPEND_AT_INDEX = "FRAGMENT_APPEND_AT_INDEX";
 
 class SkelaProcessEvents {
   static #events = new Map([
@@ -22,9 +23,11 @@ class SkelaProcessEvents {
       (ev: CustomEvent) =>
         queueMicrotask(() => {
           const fragment: F = ev.detail;
-          fragment.children.forEach((c) =>
-            fragment.$el.appendChild(REGISTRY.get(c.$ref).$el)
-          );
+          fragment.children.forEach((c, i) => {
+            const _fr = REGISTRY.get(c.$ref);
+            _fr.setIndexAt(i);
+            fragment.$el.appendChild(_fr.$el);
+          });
         }),
     ],
     [
@@ -39,11 +42,24 @@ class SkelaProcessEvents {
           if (!(_fr instanceof Fragment)) return;
           console.log(_fr);
           if (_fr.mounted) return;
-          if (!target) document.body.appendChild(_fr.$el);
-          if (target instanceof HTMLElement) target.appendChild(_fr.$el);
-          if (target instanceof Fragment) target.$el.appendChild(_fr.$el);
-          if (target instanceof Node)
-            REGISTRY.get(target.$ref).$el.appendChild(_fr.$el);
+          const _target = !target
+            ? document.body
+            : target instanceof HTMLElement
+            ? target
+            : target instanceof Fragment
+            ? target.$el
+            : target instanceof Node
+            ? REGISTRY.get(target.$ref).$el
+            : null;
+          if (!_target)
+            return console.warn(
+              "Could't find a target to paint the component."
+            );
+
+          DISPATCHER(FRAGMENT_APPEND_AT_INDEX, {
+            fragment: _fr,
+            parent: _target,
+          });
           _fr.setMounted(true);
           queueMicrotask(() => _fr.hydrate());
         });
@@ -64,6 +80,23 @@ class SkelaProcessEvents {
           parent.removeChild(_fr.$el);
           _fr.setMounted(false);
         });
+      },
+    ],
+    [
+      FRAGMENT_APPEND_AT_INDEX,
+      (ev: CustomEvent) => {
+        const { parent, fragment } = ev.detail as {
+          parent: HTMLElement;
+          fragment: F;
+        };
+        const index = fragment.indexedAt;
+        const el = fragment.$el;
+        if (index >= parent.children.length) {
+          parent.appendChild(el);
+        } else {
+          parent;
+          parent.insertBefore(el, parent.children[index]);
+        }
       },
     ],
     [

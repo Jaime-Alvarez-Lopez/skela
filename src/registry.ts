@@ -20,6 +20,10 @@ class Registry {
   has(ref: symbol): boolean {
     return this.#reg.has(ref);
   }
+  hasWhere(comparison: (v: F) => boolean) {
+    const _reg = Array.from(this.#reg);
+    return _reg.some((v) => comparison(v[1]));
+  }
 }
 /**
  *  @readonly

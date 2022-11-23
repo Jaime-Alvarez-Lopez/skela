@@ -15,9 +15,10 @@ class _Tree implements TreeRegistry {
   }
   /**
    *  Returns an HTMLElement given a custom key or null if not found
-   *  @returns {null | HTMLElement}
+   *  @param {KeyedRef} customKey
+   *  @returns {HTMLElement | null}
    */
-  public static getElement(customKey: KeyedRef): null | HTMLElement {
+  public static getElement(customKey: KeyedRef): HTMLElement | null {
     if (!(customKey instanceof Key)) return null;
     const s = REGISTRY.getWhere((f) => {
       if (f.customKey) return f.customKey.key === customKey.key;
@@ -28,9 +29,10 @@ class _Tree implements TreeRegistry {
   }
   /**
    *  Returns a Node given a custom key or null if not found
-   *  @returns {null | N}
+   *  @param {KeyedRef} customKey
+   *  @returns {N | null}
    */
-  public static getNode(customKey: KeyedRef): null | N {
+  public static getNode(customKey: KeyedRef): N | null {
     if (!(customKey instanceof Key)) return null;
     const s = REGISTRY.getWhere((f) => {
       if (f.customKey) return f.customKey.key === customKey.key;
