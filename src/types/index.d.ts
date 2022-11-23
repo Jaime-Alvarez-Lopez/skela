@@ -12,6 +12,10 @@ declare abstract class F extends KeyedRef {
   public abstract get mounted(): boolean;
   public abstract setIndexAt(index: number): void;
   public abstract get indexedAt(): number;
+  public abstract get owner(): symbol | HTMLElement;
+  public abstract setOwner(owner: symbol): void;
+  public abstract get hasIndex(): boolean;
+  public abstract setIndexAt(index: number): void;
   public abstract hydrate(): void;
 }
 
@@ -46,6 +50,7 @@ declare abstract class TreeRegistry {
   public static getElement(key: symbol): HTMLElement | null;
   public static getNode(key: symbol): Node | null;
 }
+
 type StateExecutors =
   | [
       getter: () => any,

@@ -6,7 +6,7 @@ import REGISTRY from "./registry";
 /**
  *  @class
  */
-class _Tree implements TreeRegistry {
+class Tree implements TreeRegistry {
   /**
    *  @throws {Error}
    */
@@ -42,5 +42,5 @@ class _Tree implements TreeRegistry {
     else return null;
   }
 }
-const Tree = _Tree;
+
 export default Tree;

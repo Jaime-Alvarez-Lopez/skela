@@ -25,10 +25,18 @@ class State extends MiddlewareSubscription implements StateMiddleware {
     this.#state = initialState ?? null;
     this.#observed = observed;
   }
+  /**
+   *  Returns the actual state
+   *  @returns {any}
+   */
   public getState(): any {
     return this.#state;
   }
-  public setState(nextState: any | ((lastState: any) => any)): void {
+  /**
+   *  Sets a new state given a callback or a value
+   *  @param {((lastState: any) => any) | any} nextState
+   */
+  public setState(nextState: ((lastState: any) => any) | any): void {
     if (isFunction(nextState)) this.#state = nextState(this.#state);
     else this.#state = nextState;
     if (this.#observed) DISPATCHER(STATE_UPDATE, this.subscriptions);
@@ -36,7 +44,7 @@ class State extends MiddlewareSubscription implements StateMiddleware {
 }
 
 /**
- *  Creates an state. If ovserved is true, adds the subscription in the 3rd position.
+ *  Creates an state. If ovserved is true, adds the subscription in the 3rd position of the returned array.
  *  @returns {([getter: CallableFunction,setter: CallableFunction,subscribe: FragmentSubscription] | [getter: CallableFunction, setter: CallableFunction])}
  */
 export function createState(

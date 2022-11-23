@@ -26,6 +26,7 @@ class SkelaProcessEvents {
           fragment.children.forEach((c, i) => {
             const _fr = REGISTRY.get(c.$ref);
             _fr.setIndexAt(i);
+            _fr.setOwner(fragment.key);
             fragment.$el.appendChild(_fr.$el);
           });
         }),
@@ -41,7 +42,9 @@ class SkelaProcessEvents {
           if (!(_fr instanceof Fragment)) return;
           if (_fr.mounted) return;
           const _target = !target
-            ? document.body
+            ? isSymbol(_fr.owner)
+              ? REGISTRY.get(_fr.owner as symbol).$el
+              : (_fr.owner as HTMLElement)
             : target instanceof HTMLElement
             ? target
             : target instanceof Fragment
@@ -53,7 +56,6 @@ class SkelaProcessEvents {
             return console.warn(
               "Could't find a target to paint the component."
             );
-
           DISPATCHER(FRAGMENT_APPEND_AT_INDEX, {
             fragment: _fr,
             parent: _target,
@@ -89,12 +91,23 @@ class SkelaProcessEvents {
         };
         const index = fragment.indexedAt;
         const el = fragment.$el;
-        if (index >= parent.children.length) {
-          parent.appendChild(el);
-        } else {
-          parent;
-          parent.insertBefore(el, parent.children[index]);
-        }
+        // FIXME: If parent is document.body, will be always appended at pos 0
+        queueMicrotask(() => {
+          if (parent.isEqualNode(document.body)) {
+            const idx = Array.from(document.body.children).filter(
+              (e) => !(e instanceof HTMLScriptElement)
+            ).length;
+            if (!fragment.hasIndex) {
+              console.log("idx", idx);
+              fragment.setIndexAt(idx);
+            }
+            parent.insertBefore(el, parent.childNodes[fragment.indexedAt]);
+          } else if (index >= parent.childElementCount) {
+            parent.appendChild(el);
+          } else {
+            parent.insertBefore(el, parent.childNodes[index]);
+          }
+        });
       },
     ],
     [

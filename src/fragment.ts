@@ -8,7 +8,13 @@ import DISPATCHER, {
   FRAGMENT_UNMOUNT_ACCORDION,
 } from "./dispatcher";
 import cEl from "./el";
-import { isArray, isFunction, isObject, sanityzeProps } from "./utils";
+import {
+  isArray,
+  isFunction,
+  isObject,
+  isSymbol,
+  sanityzeProps,
+} from "./utils";
 import REGISTRY from "./registry";
 
 /**
@@ -25,7 +31,9 @@ export default class Fragment extends Key implements F {
     onmount: null,
     onunmount: null,
   };
+  #owner: HTMLElement | symbol = document.body;
   #index: number = 0;
+  #hasIndex: boolean = false;
   /**
    *  @param {string} tag
    *  @param {FragmentProps} props
@@ -54,10 +62,14 @@ export default class Fragment extends Key implements F {
     }
   }
   public setIndexAt(index: number): void {
+    this.#hasIndex = true;
     this.#index = index;
   }
   public get indexedAt(): number {
     return this.#index;
+  }
+  public get hasIndex(): boolean {
+    return this.#hasIndex;
   }
   public hydrate(): void {
     if (this.#el instanceof HTMLElement && this.#props)
@@ -93,6 +105,14 @@ export default class Fragment extends Key implements F {
   }
   public get mounted() {
     return this.#mounted;
+  }
+  public get owner(): symbol | HTMLElement {
+    return this.#owner;
+  }
+  public setOwner(owner: symbol) {
+    if (!isSymbol(owner) && !REGISTRY.has(owner))
+      throw new Error("Please supply a correct owner value.");
+    this.#owner = owner;
   }
   public get props(): any {
     return this.#props;

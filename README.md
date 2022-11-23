@@ -97,7 +97,7 @@ Results into:
 </div>
 ```
 
-Mounting and unounting components:
+Mounting and unmounting components:
 
 ```javascript
 import {
@@ -114,6 +114,7 @@ function MountAndUnmountComponent() {
   const [mounted, setMounted, mountedSub] = createState(true, true);
 
   const myComponentKey = createKey();
+  //  This key can only be used in one Node
 
   return Container(
     { id: "main", subscriptions: [mountedSub] },
@@ -123,10 +124,11 @@ function MountAndUnmountComponent() {
       },
       Text("Hello,")
     ),
-    H1($NO_PROPS, Text("Wolrd!")),
+    H1($NO_PROPS, Text("World!")),
     Button(
       {
         onclick: () => {
+          //  Get the node using the key
           const t = Tree.getNode(myComponentKey);
           if (mounted()) {
             t.unpaint();
