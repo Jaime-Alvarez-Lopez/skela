@@ -97,13 +97,7 @@ Results into:
 Mounting:
 
 ```javascript
-import {
-  Container,
-  H1,
-  Text,
-  createState,
-  $NO_PROPS,
-} from "@jaime-alvarez/skela";
+import { Container, H1, Text, $NO_PROPS } from "@jaime-alvarez/skela";
 
 const title = H1($NO_PROPS, Text("Hello, World!"));
 
@@ -127,13 +121,7 @@ Result:
 Unmounting:
 
 ```javascript
-import {
-  Container,
-  H1,
-  Text,
-  createState,
-  createFragmentKey,
-} from "@jaime-alvarez/skela";
+import { Container, H1, Text, createFragmentKey } from "@jaime-alvarez/skela";
 
 const myComponentKey = createFragmentKey();
 
