@@ -19,7 +19,7 @@ declare abstract class F extends KeyedRef {
 declare abstract class N {
   constructor(ref: symbol);
   public abstract get $ref(): symbol;
-  public abstract paint(target?: HTMLElement | F | N): void;
+  public abstract paint(target?: HTMLElement | N): void;
   public abstract unpaint(): void;
 }
 

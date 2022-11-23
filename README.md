@@ -93,3 +93,80 @@ Results into:
   </div>
 </div>
 ```
+
+Mounting:
+
+```javascript
+import {
+  Container,
+  H1,
+  Text,
+  createState,
+  $NO_PROPS,
+} from "@jaime-alvarez/skela";
+
+const title = H1($NO_PROPS, Text("Hello, World!"));
+
+const container = Container({ id: "main" });
+
+title.paint(container);
+
+container.paint();
+//  Calling paint with no argument will mount on document.body
+// NOTE: painting a node into another one won't make this node a direct child of it.
+```
+
+Result:
+
+```html
+<div id="main">
+  <h1>Hello, World!</h1>
+</div>
+```
+
+Unmounting:
+
+```javascript
+import {
+  Container,
+  H1,
+  Text,
+  createState,
+  createFragmentKey,
+} from "@jaime-alvarez/skela";
+
+const myComponentKey = createFragmentKey();
+
+const container = Container(
+  { id: "main" },
+  H1(
+    {
+      key: myComponentKey,
+    },
+    Text("Hello, World!")
+  ),
+  Button(
+    { onclick: () => Tree.getNode(myComponentKey)?.unpaint() },
+    Text("Unmount")
+  )
+);
+
+container.paint();
+```
+
+Results into:
+
+```html
+<div id="main">
+  <h1>Hello, World!</h1>
+  <button>Unmount</button>
+</div>
+```
+
+After button click:
+
+```html
+<div id="main">
+  <button>Unmount</button>
+</div>
+```

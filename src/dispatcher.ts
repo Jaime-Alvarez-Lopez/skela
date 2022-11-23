@@ -40,9 +40,10 @@ class SkelaProcessEvents {
           console.log(_fr);
           if (_fr.mounted) return;
           if (!target) document.body.appendChild(_fr.$el);
+          if (target instanceof HTMLElement) target.appendChild(_fr.$el);
           if (target instanceof Fragment) target.$el.appendChild(_fr.$el);
           if (target instanceof Node)
-            REGISTRY.get(_fr.key).$el.appendChild(fragment.$el);
+            REGISTRY.get(target.$ref).$el.appendChild(_fr.$el);
           _fr.setMounted(true);
           queueMicrotask(() => _fr.hydrate());
         });

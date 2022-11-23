@@ -15,7 +15,7 @@ export default class Node implements N {
   public get $ref() {
     return this.#ref;
   }
-  public paint(target?: HTMLElement | F | N) {
+  public paint(target?: HTMLElement | N) {
     void DISPATCHER(FRAGMENT_RENDER, { target: target, fragment: this.#ref });
   }
   public unpaint(): void {
