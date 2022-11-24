@@ -91,14 +91,12 @@ class SkelaProcessEvents {
         };
         const index = fragment.indexedAt;
         const el = fragment.$el;
-        // FIXME: If parent is document.body, will be always appended at pos 0
         queueMicrotask(() => {
           if (parent.isEqualNode(document.body)) {
             const idx = Array.from(document.body.children).filter(
               (e) => !(e instanceof HTMLScriptElement)
             ).length;
             if (!fragment.hasIndex) {
-              console.log("idx", idx);
               fragment.setIndexAt(idx);
             }
             parent.insertBefore(el, parent.childNodes[fragment.indexedAt]);

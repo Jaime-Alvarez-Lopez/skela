@@ -4,7 +4,7 @@ import { vNode } from "./vnode";
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Container = (props: FragmentProps, ...children: N[]): N =>
   vNode("div", props, children);
@@ -12,7 +12,7 @@ export const Container = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Main = (props: FragmentProps, ...children: N[]): N =>
   vNode("main", props, children);
@@ -20,7 +20,7 @@ export const Main = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Section = (props: FragmentProps, ...children: N[]): N =>
   vNode("section", props, children);
@@ -28,7 +28,7 @@ export const Section = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Article = (props: FragmentProps, ...children: N[]): N =>
   vNode("article", props, children);
@@ -36,7 +36,7 @@ export const Article = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Nav = (props: FragmentProps, ...children: N[]): N =>
   vNode("nav", props, children);
@@ -44,7 +44,7 @@ export const Nav = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Aside = (props: FragmentProps, ...children: N[]): N =>
   vNode("aside", props, children);
@@ -52,7 +52,7 @@ export const Aside = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Header = (props: FragmentProps, ...children: N[]): N =>
   vNode("header", props, children);
@@ -60,7 +60,7 @@ export const Header = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Footer = (props: FragmentProps, ...children: N[]): N =>
   vNode("footer", props, children);
@@ -68,7 +68,7 @@ export const Footer = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const H1 = (props: FragmentProps, ...children: N[]): N =>
   vNode("h1", props, children);
@@ -76,7 +76,7 @@ export const H1 = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const H2 = (props: FragmentProps, ...children: N[]): N =>
   vNode("h2", props, children);
@@ -84,7 +84,7 @@ export const H2 = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const H3 = (props: FragmentProps, ...children: N[]): N =>
   vNode("h3", props, children);
@@ -92,7 +92,7 @@ export const H3 = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const H4 = (props: FragmentProps, ...children: N[]): N =>
   vNode("h4", props, children);
@@ -100,7 +100,7 @@ export const H4 = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const H5 = (props: FragmentProps, ...children: N[]): N =>
   vNode("h5", props, children);
@@ -108,7 +108,7 @@ export const H5 = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const H6 = (props: FragmentProps, ...children: N[]): N =>
   vNode("h6", props, children);
@@ -116,7 +116,7 @@ export const H6 = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Paragraph = (props: FragmentProps, ...children: N[]): N =>
   vNode("p", props, children);
@@ -124,21 +124,21 @@ export const Paragraph = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Span = (props: FragmentProps, ...children: N[]): N =>
   vNode("p", props, children);
 
 /**
  *  @param {string | (() => string)} text
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Text = (text: string | (() => string)) => vNode("text", text, []);
 /**
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Img = (props: FragmentProps, ...children: N[]): N =>
   vNode("img", props, children);
@@ -146,7 +146,7 @@ export const Img = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Table = (props: FragmentProps, ...children: N[]): N =>
   vNode("table", props, children);
@@ -154,7 +154,7 @@ export const Table = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const THead = (props: FragmentProps, ...children: N[]): N =>
   vNode("thead", props, children);
@@ -162,7 +162,7 @@ export const THead = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const TBody = (props: FragmentProps, ...children: N[]): N =>
   vNode("tbody", props, children);
@@ -170,7 +170,7 @@ export const TBody = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const TFoot = (props: FragmentProps, ...children: N[]): N =>
   vNode("tfoot", props, children);
@@ -178,7 +178,7 @@ export const TFoot = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Tr = (props: FragmentProps, ...children: N[]): N =>
   vNode("tr", props, children);
@@ -186,7 +186,7 @@ export const Tr = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Th = (props: FragmentProps, ...children: N[]): N =>
   vNode("th", props, children);
@@ -194,7 +194,7 @@ export const Th = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Td = (props: FragmentProps, ...children: N[]): N =>
   vNode("td", props, children);
@@ -203,7 +203,7 @@ export const Td = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Button = (props: FragmentProps, ...children: N[]): N =>
   vNode("button", props, children);
@@ -212,16 +212,16 @@ export const Button = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
- export const Link = (props: FragmentProps, ...children: N[]): N =>
- vNode("a", props, children);
+export const Link = (props: FragmentProps, ...children: N[]): N =>
+  vNode("a", props, children);
 
 /**
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Form = (props: FragmentProps, ...children: N[]): N =>
   vNode("form", props, children);
@@ -230,7 +230,7 @@ export const Form = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const TextArea = (props: FragmentProps, ...children: N[]): N =>
   vNode("textarea", props, children);
@@ -239,7 +239,7 @@ export const TextArea = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Input = (props: FragmentProps, ...children: N[]): N =>
   vNode("input", props, children);
@@ -247,7 +247,7 @@ export const Input = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Label = (props: FragmentProps, ...children: N[]): N =>
   vNode("label", props, children);
@@ -255,7 +255,7 @@ export const Label = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Meter = (props: FragmentProps, ...children: N[]): N =>
   vNode("meter", props, children);
@@ -263,7 +263,7 @@ export const Meter = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Progress = (props: FragmentProps, ...children: N[]): N =>
   vNode("progress", props, children);
@@ -271,7 +271,7 @@ export const Progress = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Details = (props: FragmentProps, ...children: N[]): N =>
   vNode("details", props, children);
@@ -279,7 +279,7 @@ export const Details = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Summary = (props: FragmentProps, ...children: N[]): N =>
   vNode("summary", props, children);
@@ -287,7 +287,7 @@ export const Summary = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Legend = (props: FragmentProps, ...children: N[]): N =>
   vNode("legend", props, children);
@@ -295,7 +295,7 @@ export const Legend = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Dialog = (props: FragmentProps, ...children: N[]): N =>
   vNode("dialog", props, children);
@@ -304,7 +304,7 @@ export const Dialog = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Slot = (props: FragmentProps, ...children: N[]): N =>
   vNode("slot", props, children);
@@ -312,7 +312,7 @@ export const Slot = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Select = (props: FragmentProps, ...children: N[]): N =>
   vNode("select", props, children);
@@ -321,7 +321,7 @@ export const Select = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Option = (props: FragmentProps, ...children: N[]): N =>
   vNode("option", props, children);
@@ -330,7 +330,7 @@ export const Option = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const OptGroup = (props: FragmentProps, ...children: N[]): N =>
   vNode("optgroup", props, children);
@@ -339,7 +339,7 @@ export const OptGroup = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Ul = (props: FragmentProps, ...children: N[]): N =>
   vNode("ul", props, children);
@@ -348,7 +348,7 @@ export const Ul = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Ol = (props: FragmentProps, ...children: N[]): N =>
   vNode("ol", props, children);
@@ -357,7 +357,7 @@ export const Ol = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Li = (props: FragmentProps, ...children: N[]): N =>
   vNode("li", props, children);
@@ -365,14 +365,14 @@ export const Li = (props: FragmentProps, ...children: N[]): N =>
 /**
  *  Creates a vanilla node
  *  @param {FragmentProps} props
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Hr = (props: FragmentProps): N => vNode("hr", props, []);
 
 /**
  *  Creates a vanilla node
  *  @param {FragmentProps} props
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Br = (props: FragmentProps): N => vNode("br", props, []);
 
@@ -380,7 +380,7 @@ export const Br = (props: FragmentProps): N => vNode("br", props, []);
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Menu = (props: FragmentProps, ...children: N[]): N =>
   vNode("menu", props, children);
@@ -389,7 +389,7 @@ export const Menu = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Pre = (props: FragmentProps, ...children: N[]): N =>
   vNode("pre", props, children);
@@ -398,7 +398,7 @@ export const Pre = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Code = (props: FragmentProps, ...children: N[]): N =>
   vNode("code", props, children);
@@ -407,7 +407,7 @@ export const Code = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Cite = (props: FragmentProps, ...children: N[]): N =>
   vNode("cite", props, children);
@@ -416,7 +416,7 @@ export const Cite = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Caption = (props: FragmentProps, ...children: N[]): N =>
   vNode("caption", props, children);
@@ -424,7 +424,7 @@ export const Caption = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Col = (props: FragmentProps, ...children: N[]): N =>
   vNode("col", props, children);
@@ -433,7 +433,7 @@ export const Col = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const ColGroup = (props: FragmentProps, ...children: N[]): N =>
   vNode("colgroup", props, children);
@@ -441,7 +441,7 @@ export const ColGroup = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Mark = (props: FragmentProps, ...children: N[]): N =>
   vNode("mark", props, children);
@@ -450,7 +450,7 @@ export const Mark = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Small = (props: FragmentProps, ...children: N[]): N =>
   vNode("small", props, children);
@@ -459,7 +459,7 @@ export const Small = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Strong = (props: FragmentProps, ...children: N[]): N =>
   vNode("strong", props, children);
@@ -468,7 +468,7 @@ export const Strong = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Canvas = (props: FragmentProps, ...children: N[]): N =>
   vNode("canvas", props, children);
@@ -477,7 +477,7 @@ export const Canvas = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Audio = (props: FragmentProps, ...children: N[]): N =>
   vNode("audio", props, children);
@@ -486,7 +486,7 @@ export const Audio = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Video = (props: FragmentProps, ...children: N[]): N =>
   vNode("video", props, children);
@@ -495,7 +495,7 @@ export const Video = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const IFrame = (props: FragmentProps, ...children: N[]): N =>
   vNode("iframe", props, children);
@@ -504,7 +504,7 @@ export const IFrame = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Picture = (props: FragmentProps, ...children: N[]): N =>
   vNode("picture", props, children);
@@ -513,7 +513,7 @@ export const Picture = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Source = (props: FragmentProps, ...children: N[]): N =>
   vNode("source", props, children);
@@ -522,7 +522,7 @@ export const Source = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Svg = (props: FragmentProps, ...children: N[]): N =>
   vNode("svg", props, children);
@@ -531,7 +531,7 @@ export const Svg = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const NoScript = (props: FragmentProps, ...children: N[]): N =>
   vNode("noscript", props, children);
@@ -540,7 +540,7 @@ export const NoScript = (props: FragmentProps, ...children: N[]): N =>
  *  Creates a vanilla node
  *  @param {FragmentProps} props
  *  @param {N[]} children
- *  @returns {N}
+ *  @returns {N} The generated node
  */
 export const Script = (props: FragmentProps, ...children: N[]): N =>
   vNode("script", props, children);

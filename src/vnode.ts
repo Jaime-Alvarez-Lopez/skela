@@ -12,7 +12,6 @@ export function vNode(
   children: N[] = []
 ): N {
   const fragment = new Fragment(type, props, children);
-  // TODO: need to take this somewhere
   {
     DISPATCHER(VNODE_INSTANCE, fragment);
   }

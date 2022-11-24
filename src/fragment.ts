@@ -1,3 +1,4 @@
+import { FragmentIntermediarySubscriptor } from "./subscriptions";
 import { Key } from "./key";
 import { attrs, filterRestrictedAtributes } from "./atributtes";
 import DISPATCHER, {
@@ -48,18 +49,39 @@ export default class Fragment extends Key implements F {
       if (this.hasChildren) DISPATCHER(APPEND_ELEMENT_CHILDS, this);
       if (isObject(this.#props)) {
         const _p = this.#props as Props;
-        if (_p.key && _p.key instanceof Key) {
-          if (REGISTRY.hasWhere((v) => v.customKey === _p.key))
-            throw new Error(
-              "A Node has already been referenced with this key. Plese provide a different key."
-            );
-          this.#customKey = _p.key;
-        }
-        if (_p.subscriptions) _p.subscriptions.forEach((s) => s(this.key));
-        if (_p.onmount) this.#cycle.onmount = _p.onmount as () => void;
-        if (_p.onunmount) this.#cycle.onunmount = _p.onunmount as () => void;
+        if (_p.key && _p.key instanceof Key) this.#custom_key = _p.key;
+        if (_p.subscriptions && isArray(_p.subscriptions))
+          this.#apply_subscriptions(_p.subscriptions);
+        if (_p.onmount) this.#mountCycle = _p.onmount;
+        if (_p.onunmount) this.#unmountCycle = _p.onunmount;
       }
     }
+  }
+  set #mountCycle(cycle: () => void) {
+    this.#cycle.onmount = cycle;
+  }
+  set #unmountCycle(cycle: () => void) {
+    this.#cycle.onunmount = cycle;
+  }
+  set #custom_key(custom: KeyedRef) {
+    if (
+      REGISTRY.hasWhere((v) =>
+        v.customKey ? (v.customKey.key === custom.key ? true : false) : false
+      )
+    )
+      throw new Error(
+        "A Node has already been referenced with this key. Plese provide a different key."
+      );
+    this.#customKey = custom;
+  }
+  #apply_subscriptions(susbcriptions: FragmentSubscriptor[]) {
+    susbcriptions.forEach((s) => {
+      if (!(s instanceof FragmentIntermediarySubscriptor))
+        throw new Error(
+          "Provided subscriptor is not a FragmentSubscriptor. Please provide the correct subscriptor returned from 'createState'"
+        );
+      s.subscriptor(this.key);
+    });
   }
   public setIndexAt(index: number): void {
     this.#hasIndex = true;

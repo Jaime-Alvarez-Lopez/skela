@@ -1,19 +1,35 @@
 import DISPATCHER, { STATE_UPDATE } from "./dispatcher";
 import { isFunction, isSymbol } from "./utils";
 
+export class FragmentIntermediarySubscriptor {
+  #subscription: CallableFunction;
+  constructor(subscription: CallableFunction) {
+    this.#subscription = subscription;
+  }
+  public subscriptor(ref: symbol) {
+    this.#subscription(ref);
+  }
+}
+
 class MiddlewareSubscription implements Subscription {
   readonly #subscripted = new Set<symbol>();
+
+  #add_subscription(ref: any) {
+    if (!isSymbol(ref)) throw new Error("The ref associated is not a symbol.");
+    if (this.#subscripted.has(ref))
+      throw new Error("The ref associated is registered");
+    this.#subscripted.add(ref);
+  }
 
   public get subscriptions(): symbol[] {
     return Array.from(this.#subscripted);
   }
 
-  public subscribe(ref: symbol): void {
-    if (!isSymbol(ref) || this.#subscripted.has(ref))
-      throw new Error(
-        "The ref associated is registered or is not of type symbol."
-      );
-    this.#subscripted.add(ref);
+  public subscribe(): FragmentIntermediarySubscriptor {
+    const subscriptor = new FragmentIntermediarySubscriptor(
+      this.#add_subscription.bind(this)
+    );
+    return subscriptor;
   }
 }
 
@@ -45,7 +61,7 @@ class State extends MiddlewareSubscription implements StateMiddleware {
 
 /**
  *  Creates an state. If ovserved is true, adds the subscription in the 3rd position of the returned array.
- *  @returns {([getter: CallableFunction,setter: CallableFunction,subscribe: FragmentSubscription] | [getter: CallableFunction, setter: CallableFunction])}
+ *  @returns {StateExecutors} State executors
  */
 export function createState(
   initialValue?: any,
@@ -54,6 +70,6 @@ export function createState(
   const _state = new State(initialValue, observed);
   const getter = _state.getState.bind(_state);
   const setter = _state.setState.bind(_state);
-  const subscibe = _state.subscribe.bind(_state);
+  const subscibe = _state.subscribe();
   return observed ? [getter, setter, subscibe] : [getter, setter];
 }

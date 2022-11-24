@@ -33,29 +33,27 @@ declare abstract class Subscription {
   public abstract get subscriptions(): symbol[];
   public abstract subscribe(ref: symbol): void;
 }
-type FragmentSubscription = (ref: symbol) => void;
-
-declare abstract class StateMiddleware extends Subscription {
-  constructor(initialState: any, observed: boolean);
-  public abstract getState(): any;
-  public abstract setState(nextState: any | ((lastState: any) => any)): void;
-}
 
 declare abstract class KeyedRef {
   constructor(namespace: string);
   public get key(): symbol;
 }
 
-declare abstract class TreeRegistry {
-  public static getElement(key: symbol): HTMLElement | null;
-  public static getNode(key: symbol): Node | null;
+declare abstract class FragmentSubscriptor {
+  constructor(subscription: CallableFunction);
+  public subscriptor(ref: symbol): void;
 }
 
+declare abstract class StateMiddleware extends Subscription {
+  constructor(initialState: any, observed: boolean);
+  public abstract getState(): any;
+  public abstract setState(nextState: any | ((lastState: any) => any)): void;
+}
 type StateExecutors =
   | [
       getter: () => any,
       setter: (nextState: (lastState: any) => any) => void,
-      subscribe: FragmentSubscription
+      subscribe: FragmentSubscriptor
     ]
   | [getter: () => any, setter: (nextState: (lastState: any) => any) => void];
 
@@ -160,6 +158,11 @@ type EventAtributes = {
   onwheel?: EventListener;
 };
 
+declare abstract class TreeRegistry {
+  public static getElement(key: symbol): HTMLElement | null;
+  public static getNode(key: symbol): Node | null;
+}
+
 type ElementAssignableAtributeProps = HTMLAtributes & EventAtributes;
 
 type Props = HTMLAtributes &
@@ -167,5 +170,5 @@ type Props = HTMLAtributes &
     onmount?: () => void;
     onunmount?: () => void;
     key?: KeyedRef;
-    subscriptions?: ((ref: symbol) => void)[];
+    subscriptions?: FragmentSubscriptor[];
   };
