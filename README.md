@@ -9,7 +9,7 @@ const myComponent = Container(
   {
     id: "main",
   },
-  H1({ className: "world" }, Text("Hello, World!"))
+  [H1({ className: "world" }, Text("Hello, World!"))]
 );
 
 myComponent.paint();
@@ -55,26 +55,32 @@ function Component() {
       subscriptions: [dataSubscription, loadSubscription],
       onmount: req,
     },
-    Container(
-      {
-        style: "padding: 10px;",
-      },
-      H1(
+    [
+      Container(
         {
-          className: "cat-fact",
+          style: "padding: 10px;",
         },
-        Text(() => data())
-      )
-    ),
-    Container(
-      {
-        style: "padding: 10px;",
-      },
-      Button(
-        () => (isLoading() ? { disabled: "" } : { onclick: req }),
-        Text("Fetch new")
-      )
-    )
+        [
+          H1(
+            {
+              className: "cat-fact",
+            },
+            Text(() => data())
+          ),
+        ]
+      ),
+      Container(
+        {
+          style: "padding: 10px;",
+        },
+        [
+          Button(
+            () => (isLoading() ? { disabled: "" } : { onclick: req }),
+            [Text("Fetch new")]
+          ),
+        ]
+      ),
+    ]
   );
 }
 
@@ -116,13 +122,12 @@ function MountAndUnmountComponent() {
   const myComponentKey = createKey();
   //  This key can only be used in one Node
 
-  return Container(
-    { id: "main", subscriptions: [mountedSub] },
+  return Container({ id: "main", subscriptions: [mountedSub] }, [
     H1(
       {
         key: myComponentKey,
       },
-      Text("Hello,")
+      [Text("Hello,")]
     ),
     H1($NO_PROPS, Text("World!")),
     Button(
@@ -139,9 +144,9 @@ function MountAndUnmountComponent() {
           }
         },
       },
-      Text(() => (mounted() ? "Unmount" : "Mount"))
-    )
-  );
+      [Text(() => (mounted() ? "Unmount" : "Mount"))]
+    ),
+  ]);
 }
 
 MountAndUnmountComponent().paint();
@@ -174,4 +179,20 @@ After second button click:
   <h1>World!</h1>
   <button>Unmount</button>
 </div>
+```
+
+Reactive child:
+
+```javascript
+import { Container, H1, Text, createState } from "@jaime-alvarez/skela";
+
+const [users, getUsers, usersSubs] = createState([], true);
+
+const req = async function () {
+  /** Some req that will change state */
+};
+
+const myComponent = Container({ subscriptions: [usersSubs] }, () =>
+  users().map((u) => H1({}, [Text(u.name)]))
+);
 ```
