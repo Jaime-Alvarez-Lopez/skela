@@ -23,7 +23,8 @@ class SkelaProcessEvents {
       (ev: CustomEvent) =>
         queueMicrotask(() => {
           const fragment: F = ev.detail;
-          fragment.children.forEach((c, i) => {
+          (fragment.$el as HTMLElement).innerHTML = "";
+          (fragment.children as N[]).forEach((c, i) => {
             const _fr = REGISTRY.get(c.$ref);
             _fr.setIndexAt(i);
             _fr.setOwner(fragment.key);

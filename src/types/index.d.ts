@@ -1,12 +1,12 @@
 type FragmentProps = Props | (() => Props | string) | string | null;
 
 declare abstract class F extends KeyedRef {
-  constructor(tag: string, props: FragmentProps, children: N[]);
+  constructor(tag: string, props: FragmentProps, children: N[] | (() => N[]));
   public abstract get $el(): HTMLElement | Text;
   public abstract get key(): symbol;
   public abstract get customKey(): KeyedRef | null;
   public abstract get hasChildren(): boolean;
-  public abstract get children(): N[];
+  public abstract get children(): N[] | (() => N[]);
   public abstract get props(): any;
   public abstract setMounted(mounted: boolean): void;
   public abstract get mounted(): boolean;
