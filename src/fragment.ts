@@ -25,7 +25,7 @@ import REGISTRY from "./registry";
 export default class Fragment extends Key implements F {
   #el: HTMLElement | Text;
   #props: FragmentProps | any;
-  #children: N[];
+  #children: N[] | (() => N[]) = [];
   #customKey: null | KeyedRef = null;
   #mounted = false;
   #cycle: { onmount: (() => void) | null; onunmount: (() => void) | null } = {
@@ -35,27 +35,39 @@ export default class Fragment extends Key implements F {
   #owner: HTMLElement | symbol = document.body;
   #index: number = 0;
   #hasIndex: boolean = false;
+  #hasAppliedSubscriptions = false;
+  #factoryChildren: (() => N[]) | null = null;
+  #hasFactoryChildren: boolean = false;
   /**
    *  @param {string} tag
    *  @param {FragmentProps} props
+   *  @param {N[] | (() => N[])} children
    *  @constructs Fragment
    */
-  constructor(tag: string, props: FragmentProps, children: N[]) {
+  constructor(tag: string, props: FragmentProps, children: N[] | (() => N[])) {
     super("fragment");
     this.#el = cEl(tag, props);
     this.#props = sanityzeProps(props);
     this.#children = children;
-    {
-      if (this.hasChildren) DISPATCHER(APPEND_ELEMENT_CHILDS, this);
-      if (isObject(this.#props)) {
-        const _p = this.#props as Props;
-        if (_p.key && _p.key instanceof Key) this.#custom_key = _p.key;
-        if (_p.subscriptions && isArray(_p.subscriptions))
-          this.#apply_subscriptions(_p.subscriptions);
-        if (_p.onmount) this.#mountCycle = _p.onmount;
-        if (_p.onunmount) this.#unmountCycle = _p.onunmount;
-      }
+
+    if (isObject(this.#props)) {
+      const _p = this.#props as Props;
+      if (_p.key && _p.key instanceof Key) this.#custom_key = _p.key;
+      if (_p.subscriptions && isArray(_p.subscriptions))
+        this.#apply_subscriptions(_p.subscriptions);
+      if (_p.onmount) this.#mountCycle = _p.onmount;
+      if (_p.onunmount) this.#unmountCycle = _p.onunmount;
     }
+    if (typeof this.#children === "function") {
+      if (!this.#hasAppliedSubscriptions)
+        throw new Error(
+          "Don't add a reactive child without applying a subscription."
+        );
+      this.#hasFactoryChildren = true;
+      this.#factoryChildren = this.#children;
+      this.#children = (this.#factoryChildren as () => N[])();
+    }
+    if (this.hasChildren) DISPATCHER(APPEND_ELEMENT_CHILDS, this);
   }
   set #mountCycle(cycle: () => void) {
     this.#cycle.onmount = cycle;
@@ -82,6 +94,7 @@ export default class Fragment extends Key implements F {
         );
       s.subscriptor(this.key);
     });
+    this.#hasAppliedSubscriptions = true;
   }
   public setIndexAt(index: number): void {
     this.#hasIndex = true;
@@ -101,12 +114,16 @@ export default class Fragment extends Key implements F {
           isFunction(this.#props) ? this.#props() : this.#props
         )
       );
-    if (this.#el instanceof Text && this.#props) {
+    if (this.#el instanceof Text && this.#props)
       this.#el.deleteData(0, this.#el.data.length),
         this.#el.insertData(
           0,
           isFunction(this.#props) ? this.#props() : this.#props
         );
+
+    if (this.#hasFactoryChildren) {
+      this.#children = (this.#factoryChildren as () => N[])();
+      DISPATCHER(APPEND_ELEMENT_CHILDS, this);
     }
     if (this.hasChildren) DISPATCHER(CHILDREN_HYDRATE, this.#children);
   }
@@ -142,7 +159,7 @@ export default class Fragment extends Key implements F {
   public get hasChildren(): boolean {
     return isArray(this.#children) && this.#children.length > 0;
   }
-  public get children(): N[] {
+  public get children(): (() => N[]) | N[] {
     return this.#children;
   }
   public get customKey(): null | KeyedRef {

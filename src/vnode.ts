@@ -9,7 +9,7 @@ import Node from "./node";
 export function vNode(
   type: string,
   props: FragmentProps = null,
-  children: N[] = []
+  children: N[] | (() => N[]) = []
 ): N {
   const fragment = new Fragment(type, props, children);
   {
