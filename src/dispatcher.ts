@@ -10,6 +10,7 @@ export const FRAGMENT_MOUNT_ACCORDION = "FRAGMENT_MOUNT_ACCORDION";
 export const FRAGMENT_UNMOUNT_ACCORDION = "FRAGMENT_UNMOUNT_ACCORDION";
 
 export const APPEND_ELEMENT_CHILDS = "APPEND_ELEMENT_CHILDS";
+export const CLEAR_CHILDS = "CLEAR_CHILDS";
 export const CHILDREN_HYDRATE = "CHILDREN_HYDRATE";
 export const STATE_UPDATE = "STATE_UPDATE";
 export const FRAGMENT_SIDE_EFFECT = "FRAGMENT_SIDE_EFFECT";
@@ -31,6 +32,22 @@ class SkelaProcessEvents {
             fragment.$el.appendChild(_fr.$el);
           });
         }),
+    ],
+    [
+      CLEAR_CHILDS,
+      (ev: CustomEvent) => {
+        const childs: N[] = ev.detail;
+        queueMicrotask(() =>
+          childs.forEach((c) => {
+            if (REGISTRY.has(c.$ref)) {
+              const f = REGISTRY.get(c.$ref);
+              if (f.hasChildren) DISPATCHER(CLEAR_CHILDS, f.children);
+              void f.$el.remove();
+              REGISTRY.remove(c.$ref);
+            }
+          })
+        );
+      },
     ],
     [
       FRAGMENT_RENDER,

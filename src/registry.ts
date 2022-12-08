@@ -24,6 +24,9 @@ class Registry {
     const _reg = Array.from(this.#reg);
     return _reg.some((v) => comparison(v[1]));
   }
+  remove(ref: symbol) {
+    this.#reg.delete(ref);
+  }
 }
 /**
  *  @readonly

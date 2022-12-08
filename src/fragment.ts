@@ -4,6 +4,7 @@ import { attrs, filterRestrictedAtributes } from "./atributtes";
 import DISPATCHER, {
   APPEND_ELEMENT_CHILDS,
   CHILDREN_HYDRATE,
+  CLEAR_CHILDS,
   FRAGMENT_MOUNT_ACCORDION,
   FRAGMENT_SIDE_EFFECT,
   FRAGMENT_UNMOUNT_ACCORDION,
@@ -122,6 +123,7 @@ export default class Fragment extends Key implements F {
         );
 
     if (this.#hasFactoryChildren) {
+      DISPATCHER(CLEAR_CHILDS, this.#children);
       this.#children = (this.#factoryChildren as () => N[])();
       DISPATCHER(APPEND_ELEMENT_CHILDS, this);
     }
